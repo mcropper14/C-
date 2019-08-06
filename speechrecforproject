@@ -1,0 +1,33 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Speech.Recognition;
+
+
+namespace SpeechApp
+{
+    class Program
+    {
+
+        private static SpeechRecognitionEngine engine;
+
+        static void Main(string[] args)
+        {
+            engine = new SpeechRecognitionEngine();
+            engine.SetInputToDefaultAudioDevice();
+
+            engine.LoadGrammar(new DictationGrammar());
+
+            engine.RecognizeAsync(RecognizeMode.Multiple);
+
+           
+            engine.SpeechRecognized += rec;
+
+            Console.ReadKey();
+        }
+
+        private static void rec(object sender, SpeechRecognizedEventArgs result)
+        {
+            Console.WriteLine("You said: {0}    Conf: {1}", result.Result.Text, result.Result.Confidence);
+        }
